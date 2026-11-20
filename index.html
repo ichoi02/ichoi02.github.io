@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- ═══ EDIT ME ═══ Browser tab title and search-engine description -->
-<title>Your Name</title>
-<meta name="description" content="One sentence about what you do.">
+<title>Itak Choi</title>
+<meta name="description" content="Itak Choi — robotics researcher at Carnegie Mellon working on learning-based control for exoskeletons and prostheses.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,7 +104,7 @@ body {
   .section {
     display: grid;
     grid-template-columns: 7rem 1fr;
-    gap: 2.5rem;
+    column-gap: 2.5rem;
   }
   .section h2 { margin: 0.35rem 0 0; }
   .section > *:not(h2) { grid-column: 2; }
@@ -113,10 +113,10 @@ body {
 .section p { margin: 0 0 1rem; max-width: 62ch; }
 .section p:last-child { margin-bottom: 0; }
 
-/* ───────────── Work / writing entries ───────────── */
+/* ───────────── Project entries ───────────── */
 .entry {
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.1rem;
   border-bottom: 1px solid var(--rule);
 }
 .entry:last-child { border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
@@ -126,10 +126,10 @@ body {
   font-weight: 400;
   font-size: 1.3125rem;
   line-height: 1.3;
-  margin: 0 0 0.35rem;
+  margin: 0;
 }
 
-.entry p { margin: 0; color: var(--muted); max-width: 60ch; }
+.entry p { margin: 0.35rem 0 0; color: var(--muted); max-width: 60ch; }
 
 .year {
   font-family: var(--sans);
@@ -174,17 +174,20 @@ footer {
 
   <!-- ═══════════ EDIT ME: header ═══════════ -->
   <header>
-    <h1 class="name">Your Name</h1>
+    <h1 class="name">Itak Choi</h1>
 
     <p class="lead">
-      Backend engineer in Pittsburgh, working on payments infrastructure
-      and the occasional side project.
+      Robotics researcher at Carnegie Mellon, working on learning-based
+      control for exoskeletons and prostheses.
     </p>
 
     <p class="meta">
-      <a href="mailto:you@example.com">you@example.com</a>
+      <a href="mailto:itakc@cmu.edu">itakc@cmu.edu</a>
+      <!-- Uncomment and fill in to add more links:
       <a href="https://github.com/yourusername">GitHub</a>
       <a href="https://linkedin.com/in/yourusername">LinkedIn</a>
+      <a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
+      -->
     </p>
   </header>
 
@@ -192,51 +195,37 @@ footer {
   <section class="section">
     <h2>About</h2>
     <p>
-      Two or three sentences about what you do and what you care about.
-      Skip the résumé summary voice — write the way you'd describe your
-      work to someone you just met at a conference.
-    </p>
-    <p>
-      Right now I'm focused on distributed systems and developer tooling.
-      Previously at Company A and Company B, and before that a computer
-      science degree from University Name.
+      I'm a researcher in the MetaMobility Lab at Carnegie Mellon University,
+      where I build controllers for wearable robots: hip and knee exoskeletons
+      and powered knee-ankle prostheses. Most of my work uses learning-based
+      methods to make these devices adapt to the person wearing them. I also
+      have a soft spot for bio-inspired robots, including one that rights
+      itself mid-air the way a cat does.
     </p>
   </section>
 
-  <!-- ═══════════ EDIT ME: work ═══════════
+  <!-- ═══════════ EDIT ME: projects ═══════════
        Copy an .entry block to add another project.
-       Delete the <a> wrapper if a project has no link. -->
+       Wrap the title in <a href="..."> to link it, add
+       <span class="year">2026</span> after the title for a year,
+       or add a <p> under the title for a one-line description. -->
   <section class="section">
-    <h2>Work</h2>
+    <h2>Projects</h2>
 
     <div class="entry">
-      <h3><a href="https://example.com">Project Name</a><span class="year">2026</span></h3>
-      <p>One line on what it is and what you built. Concrete beats clever.</p>
+      <h3>Imitation Learning for Hip Exoskeleton Control</h3>
     </div>
 
     <div class="entry">
-      <h3><a href="https://example.com">Another Project</a><span class="year">2025</span></h3>
-      <p>An open-source library for doing a specific thing well. 400 stars.</p>
+      <h3>Soft Impedance Learning for Knee Exoskeleton Control</h3>
     </div>
 
     <div class="entry">
-      <h3>Internal Tool<span class="year">2024</span></h3>
-      <p>Something you can describe but can't link to. That's fine.</p>
-    </div>
-  </section>
-
-  <!-- ═══════════ EDIT ME: writing (delete this whole section if unused) ═══════════ -->
-  <section class="section">
-    <h2>Writing</h2>
-
-    <div class="entry">
-      <h3><a href="https://example.com">Title of a post you wrote</a><span class="year">2026</span></h3>
-      <p>A sentence on what it argues.</p>
+      <h3>Cat-Inspired Aerial Righting Robot</h3>
     </div>
 
     <div class="entry">
-      <h3><a href="https://example.com">Another piece</a><span class="year">2025</span></h3>
-      <p>A sentence on what it argues.</p>
+      <h3>Learning a Versatile &amp; Personalized Controller for Knee-Ankle Prostheses</h3>
     </div>
   </section>
 
@@ -245,13 +234,14 @@ footer {
     <h2>Contact</h2>
     <p>
       The fastest way to reach me is
-      <a href="mailto:you@example.com">email</a>.
-      I'm open to conversations about interesting infrastructure problems.
+      <a href="mailto:itakc@cmu.edu">email</a>.
+      I'm always happy to talk about wearable robotics, assistive devices,
+      and learning-based control.
     </p>
   </section>
 
   <footer>
-    <p>© 2026 Your Name</p>
+    <p>© 2026 Itak Choi</p>
   </footer>
 
 </main>
