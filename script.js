@@ -1,4 +1,4 @@
-/* Photo carousel, resume dropdown, project track arrows, and scroll-entry reveals. */
+/* Photo carousel, resume dropdown, collapsible project list, and scroll-entry reveals. */
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -8,8 +8,6 @@ function initCarousel(root) {
   const frame = root.querySelector('.carousel-frame');
   const photos = [...frame.querySelectorAll('img')];
   const dotsBox = root.querySelector('.carousel-dots');
-  const captionText = root.querySelector('.carousel-caption-text');
-  const count = root.querySelector('.carousel-count');
   let current = 0;
 
   // Build one dot per photo
@@ -31,10 +29,8 @@ function initCarousel(root) {
       photo.setAttribute('aria-hidden', i !== current);
     });
 
-    // Sync the dots, caption and counter
+    // Sync the dots
     dots.forEach((dot, i) => dot.setAttribute('aria-current', i === current));
-    captionText.textContent = photos[current].dataset.caption;
-    count.textContent = `${current + 1} / ${photos.length}`;
   }
 
   // Arrow buttons and arrow keys
@@ -60,35 +56,41 @@ function initCarousel(root) {
 }
 
 
-/* Page the project cards with the arrow buttons and disable them at the ends. */
-function initTrack(section) {
-  const track = section.querySelector('.track');
-  const nav = section.querySelector('.track-nav');
-  const prev = section.querySelector('.track-btn--prev');
-  const next = section.querySelector('.track-btn--next');
+/* Show the first three projects with the next one fading out, and open the rest from a View more button. */
+function initProjects(list, toggle) {
+  const rows = [...list.children];
+  const shown = 3;
 
-  /* Enable or disable each arrow based on scroll position. */
-  function update() {
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    prev.disabled = track.scrollLeft <= 2;
-    next.disabled = track.scrollLeft >= maxScroll - 2;
-    nav.hidden = maxScroll <= 2;
+  // Leave the list open when there is nothing to hide
+  if (rows.length <= shown) return;
+  toggle.hidden = false;
+
+  /* Clip the list a little below the top of the first hidden project. */
+  function measure() {
+    const peek = parseFloat(getComputedStyle(list).getPropertyValue('--peek'));
+    const top = rows[shown].getBoundingClientRect().top - list.getBoundingClientRect().top;
+    list.style.setProperty('--collapsed-height', `${top + peek}px`);
   }
 
-  /* Scroll one view's width forward (1) or back (-1). */
-  function page(direction) {
-    track.scrollBy({
-      left: direction * track.clientWidth,
-      behavior: reduceMotion ? 'auto' : 'smooth',
-    });
+  /* Collapse or expand the list, keeping clipped rows out of the tab order. */
+  function setExpanded(expanded) {
+    list.classList.toggle('is-collapsed', !expanded);
+    rows.slice(shown).forEach((row) => { row.inert = !expanded; });
+    toggle.setAttribute('aria-expanded', expanded);
+    toggle.querySelector('span').textContent = expanded ? 'View less' : 'View more';
   }
 
-  // Wire the arrows and keep their state in sync
-  prev.addEventListener('click', () => page(-1));
-  next.addEventListener('click', () => page(1));
-  track.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  // Start collapsed and re-measure whenever the list reflows
+  measure();
+  setExpanded(false);
+  new ResizeObserver(measure).observe(list);
+
+  // Toggle on click; after collapsing, bring the button back into view
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+    setExpanded(expanded);
+    if (!expanded) toggle.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
 }
 
 
@@ -118,31 +120,29 @@ function initResume(toggle) {
 }
 
 
-/* Fade blocks in as they enter the viewport; a .reveal-group reveals all its children at once. */
+/* Fade blocks in as they enter the viewport. */
 function initReveals() {
-  const targets = document.querySelectorAll('.reveal:not(.reveal-group .reveal), .reveal-group');
+  const items = document.querySelectorAll('.reveal');
 
   // Show everything right away if the observer is unavailable
   if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+    items.forEach((el) => el.classList.add('is-visible'));
     return;
   }
 
-  // Reveal each target once, the first time it scrolls into view
+  // Reveal each block once, the first time it scrolls into view
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      const group = entry.target.matches('.reveal-group');
-      const items = group ? entry.target.querySelectorAll('.reveal') : [entry.target];
-      items.forEach((el) => el.classList.add('is-visible'));
+      entry.target.classList.add('is-visible');
       observer.unobserve(entry.target);
     });
   }, { rootMargin: '0px 0px -8% 0px' });
-  targets.forEach((el) => observer.observe(el));
+  items.forEach((el) => observer.observe(el));
 }
 
 
 initCarousel(document.querySelector('.carousel'));
 initResume(document.querySelector('.resume-toggle'));
-initTrack(document.querySelector('#projects'));
+initProjects(document.querySelector('#project-list'), document.querySelector('.more-toggle'));
 initReveals();
